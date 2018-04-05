@@ -14,12 +14,18 @@
         "Other"
     ],
     "activationEvents": [
-        "*"
+        "*",
+        "onCommand:causeObjectExplorerToHang"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "configuration": [],
-        "commands": [],
+        "commands": [
+            {
+                "command": "causeObjectExplorerToHang",
+                "title": "Cause Object Explorer to hang"
+            }
+        ],
         "views": {},
         "menus": {},
         "dashboard.tabs": [

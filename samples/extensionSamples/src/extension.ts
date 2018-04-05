@@ -6,6 +6,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
+import * as sqlops from 'sqlops';
 
 import ControllerBase from './controllers/controllerBase';
 import MainController from './controllers/mainController';
@@ -14,6 +15,8 @@ let controllers: ControllerBase[] = [];
 
 export function activate(context: vscode.ExtensionContext): Promise<boolean> {
     let activations: Promise<boolean>[] = [];
+
+    context.subscriptions.push(vscode.commands.registerCommand('causeObjectExplorerToHang', () => causeObjectExplorerToHang()));
 
     // Start the main controller
     let mainController = new MainController(context);
@@ -36,4 +39,13 @@ export function deactivate(): void {
     for (let controller of controllers) {
         controller.deactivate();
     }
+}
+
+async function causeObjectExplorerToHang(): Promise<void> {
+    const currentConnection = await sqlops.connection.getCurrentConnection();
+    const connectionId = currentConnection.connectionId;
+    const database = 'WideWorldImporters';
+
+    // tslint:disable-next-line:no-unused-variable
+    const nodes = await sqlops.objectexplorer.findNodes(connectionId, 'Database', undefined, database, undefined, undefined);
 }
